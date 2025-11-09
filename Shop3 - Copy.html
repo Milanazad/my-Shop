@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRAMIN TECH Service Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght=600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Fonts and Base Styles */
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: #eef2ff; /* Light Lavender/Blue Background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* --- 1. RGB Text Effect for Shop Name --- */
+        .brand-text {
+            /* Base color for visibility before gradient is applied */
+            color: #fff; 
+            font-size: 3rem; 
+            font-weight: 900;
+            line-height: 1;
+            
+            /* Apply a dynamic RGB gradient background */
+            background: linear-gradient(90deg, #ff00cc, #3333ff, #00ffaa, #ff00cc);
+            background-size: 300% 100%;
+            
+            /* Apply the gradient to the text only */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            
+            /* Animation for the RGB effect */
+            animation: neon-gradient 4s ease infinite;
+        }
+
+        @keyframes neon-gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Main Banner Styling (Deep Blue Gradient) */
+        .banner {
+            background: linear-gradient(135deg, #1e3a8a, #10346a); /* Deeper blue tones */
+        }
+        
+        /* Service Item Base Styling (Text color for services is light) */
+        .service-item-base {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left-width: 4px;
+            color: #f0fdf4; /* Light text color */
+        }
+        .service-item-base:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            color: #fff;
+        }
+
+        /* Loading Spinner */
+        .loading-ring {
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #1e3a8a;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="p-4 space-y-8">
+
+    <!-- Main application container where content will be rendered -->
+    <div id="app-container" class="w-full max-w-5xl">
+        <!-- Content inserted by JavaScript here -->
+    </div>
+    
+    <script>
+        const apiKey = ""; 
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+        const whatsappNumber = '919333617735'; 
+
+        // --- Service Content Data ---
+        const serviceData = {
+            online_form: {
+                title: "✦ অনলাইন আবেদন ও সংশোধন: নির্ভুলতা আমাদের প্রথম লক্ষ্য",
+                content: "এই গুরুত্বপূর্ণ সরকারি কাজগুলিতে আমরা **সর্বাধিক যত্ন** সহকারে কাজ করি। প্রতিটি ফর্মে একাধিকবার যাচাই (**ডাবল-চেক**) করা হয়, যাতে তথ্যগত কোনো ত্রুটি না থাকে। আপনার আবেদন দ্রুত এবং নির্ভুলভাবে সম্পন্ন করার জন্য আমরা সরকারি নিয়মাবলী কঠোরভাবে অনুসরণ করি। আমরা নিশ্চিত করি যেন আপনার কোনো আবেদন **বাতিল না হয়**।"
+            },
+            land_work: {
+                title: "✦ জমি সংক্রান্ত কাজ: সংবেদনশীল নথির জন্য সতর্কতা",
+                content: "জমি সংক্রান্ত কাজ **অত্যন্ত সংবেদনশীল ও আইনি**। আমরা প্রতিটি পর্চা ও খতিয়ান আবেদনের আগে আপনার মূল নথিগুলির সাথে মিলিয়ে নিই। রেকর্ড সংশোধনের ক্ষেত্রে আমরা সমস্ত প্রয়োজনীয় ডকুমেন্ট (যেমন ডীড বা মিউটেশন কপি) সঠিকভাবে সংযুক্ত করি, যাতে আপনার কাজ **একবারে সফল হয়** এবং কোনো আইনি জটিলতা সৃষ্টি না হয়।"
+            },
+            design: {
+                title: "✦ প্রশ্নপত্র, সার্টিফিকেট, মার্কশিট ডিজাইন: পেশাদারিত্ব ও মান",
+                content: "আপনার প্রতিষ্ঠানের মর্যাদা এবং প্রয়োজনীয়তা মাথায় রেখে আমরা **উচ্চ-মানের ডিজাইন** করি। প্রশ্নপত্রের গোপনীয়তা বজায় রাখা হয় এবং সার্টিফিকেট ও মার্কশিট ডিজাইনে **অফিশিয়াল মান ও রঙের সঠিক ব্যবহার** নিশ্চিত করা হয়, যা পেশাদারিত্বের ছাপ ফেলে। আমরা ডিজাইনে **১০০% নির্ভুলতা** নিশ্চিত করি।"
+            },
+            web_dev: {
+                title: "✦ ওয়েবসাইট ডিজাইন ও ডেভেলপমেন্ট: আধুনিক এবং কার্যকরী",
+                content: "ওয়েবসাইট হলো আপনার ব্যবসার ডিজিটাল পরিচয়। আমরা ক্লায়েন্টের প্রয়োজন অনুযায়ী **আধুনিক, দ্রুতগামী এবং মোবাইল-ফ্রেন্ডলি** ওয়েবসাইট তৈরি করি। কোডিং-এর প্রতিটি ধাপে মান বজায় রাখা হয়, যাতে সাইটটি **নিরাপদ ও ভবিষ্যতে আপডেটের জন্য প্রস্তুত** থাকে। আমরা SEO ফ্রেন্ডলি কাঠামো তৈরি করি।"
+            },
+            photo_print: {
+                title: "✦ ফটো এডিটিং, স্ক্যান ও প্রিন্ট সার্ভিস: গুণগত মান বজায় রেখে কাজ",
+                content: "ছবি এডিটিং ও স্ক্যানিং-এর ক্ষেত্রে আমরা ছবির **মানের বিশুদ্ধতা** বজায় রাখি। ডকুমেন্ট স্ক্যানিং-এ **সঠিক রেজোলিউশন** এবং প্রিন্ট আউটে রঙের সঠিক ঘনত্ব নিশ্চিত করি। প্রতিটি প্রিন্ট ফাইনাল চেকিং-এর পরেই ডেলিভারি দেওয়া হয়। আমরা আপনার মেমরি বা ডকুমেন্টের গুরুত্ব বুঝি।"
+            },
+            recharge_bill: {
+                title: "✦ মোবাইল রিচার্জ ও ইলেকট্রিক বিল পেমেন্ট: নিরাপদ ও তাৎক্ষণিক লেনদেন",
+                content: "দ্রুত ও **নিরাপদ লেনদেনই** আমাদের প্রধান লক্ষ্য। বিল পেমেন্টের সময় বিলের তথ্য ও গ্রাহক আইডি **সঠিকভাবে মিলিয়ে** নেওয়া হয়, যাতে ভুল অ্যাকাউন্টে টাকা না যায়। প্রতিটি লেনদেন সফল হওয়ার পর পরই গ্রাহককে রসিদ প্রদান করা হয় এবং রসিদ সংরক্ষণ করা হয়।"
+            },
+            admission_exam: {
+                title: "✦ অনলাইন ফর্ম ফিল-আপ, অ্যাডমিশন, এক্সাম অ্যাপ্লিকেশন: ভুলের কোনো সুযোগ নেই",
+                content: "ফর্ম ফিল-আপের সময় সামান্য ভুলও বড় সমস্যা সৃষ্টি করতে পারে। আমরা প্রতিটি তথ্য (নাম, জন্ম তারিখ, যোগ্যতা) **আপনার মূল নথি অনুযায়ী** যত্ন সহকারে প্রবেশ করাই এবং সাবমিট করার আগে **শেষবারের মতো আপনার অনুমোদনের জন্য দেখাই**। আমরা সময়সীমার মধ্যে ফর্ম জমা দেওয়ার গুরুত্ব বুঝি।"
+            }
+        };
+
+        // --- 2. Distinct Colors for Services (People's Favorites) ---
+        const servicesList = [
+            { id: 'online_form', label: '✦ অনলাইন আবেদন ও সংশোধন: ভোটার, আধার, প্যান, রেশন কার্ড' },
+            { id: 'land_work', label: '✦ জমি সংক্রান্ত কাজ (পর্চা, খতিয়ান, রেকর্ড সংশোধন ইত্যাদি)' },
+            { id: 'design', label: '✦ প্রশ্নপত্র, সার্টিফিকেট, মার্কশিট ডিজাইন' },
+            { id: 'admission_exam', label: '✦ অনলাইন ফর্ম ফিল-আপ, অ্যাডমিশন, এক্সাম অ্যাপ্লিকেশন' },
+            { id: 'web_dev', label: '✦ ওয়েবসাইট ডিজাইন ও ডেভেলপমেন্ট' },
+            { id: 'photo_print', label: '✦ ফটো এডিটিং, স্ক্যান ও প্রিন্ট সার্ভিস' },
+            { id: 'recharge_bill', label: '✦ মোবাইল রিচার্জ ও ইলেকট্রিক বিল পেমেন্ট' },
+        ];
+
+        // Unique popular colors (base and hover)
+        const serviceColors = [
+            // Pink/Rose
+            { base: 'border-rose-400 bg-rose-900/40 hover:bg-rose-800/60', arrow: 'text-rose-300' }, 
+            // Amber/Orange
+            { base: 'border-amber-400 bg-amber-900/40 hover:bg-amber-800/60', arrow: 'text-amber-300' }, 
+            // Sky/Light Blue
+            { base: 'border-sky-400 bg-sky-900/40 hover:bg-sky-800/60', arrow: 'text-sky-300' }, 
+            // Lime/Green
+            { base: 'border-lime-400 bg-lime-900/40 hover:bg-lime-800/60', arrow: 'text-lime-300' }, 
+            // Violet/Purple
+            { base: 'border-violet-400 bg-violet-900/40 hover:bg-violet-800/60', arrow: 'text-violet-300' }, 
+            // Emerald/Teal
+            { base: 'border-emerald-400 bg-emerald-900/40 hover:bg-emerald-800/60', arrow: 'text-emerald-300' }, 
+            // Red/Maroon
+            { base: 'border-red-400 bg-red-900/40 hover:bg-red-800/60', arrow: 'text-red-300' }, 
+        ];
+
+        // --- Logo Component (SVG) ---
+        function getLogoSVG() {
+            return `
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-3">
+                    <rect width="40" height="40" rx="10" fill="url(#paint0_linear_logo)"/>
+                    <path d="M12 28V12H16V20.5L20 12H23.5L19.5 20.5L24 28H20.5L17.5 23.5L14.5 28H12Z" fill="#F0FDF4"/>
+                    <path d="M26 28V12H30V28H26Z" fill="#34D399"/>
+                    <defs>
+                        <linearGradient id="paint0_linear_logo" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#3b82f6"/>
+                            <stop offset="1" stop-color="#0e7490"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            `;
+        }
+
+        // Generates the HTML for the Main Banner View
+        function generateMainBannerHTML() {
+            let column1 = '';
+            let column2 = '';
+
+            servicesList.forEach((service, index) => {
+                const color = serviceColors[index % serviceColors.length]; // Cycle colors if more services are added
+                const serviceHtml = `
+                    <a href="#details-${service.id}" class="service-item-base ${color.base} p-4 rounded-xl block hover:shadow-2xl">
+                        <p class="font-semibold text-md md:text-lg flex justify-between items-center">
+                            <span>${service.label}</span>
+                            <span class="ml-2 ${color.arrow}">»</span>
+                        </p>
+                    </a>
+                `;
+                // Distribute items roughly equally into two columns
+                if (index % 2 === 0) {
+                    column1 += serviceHtml;
+                } else {
+                    column2 += serviceHtml;
+                }
+            });
+
+            return `
+                <!-- Main Header Container with Logo -->
+                <header class="flex items-center justify-center mb-8 w-full">
+                    <div class="flex flex-col items-center p-4 rounded-xl bg-white shadow-2xl">
+                        ${getLogoSVG()}
+                        <h1 class="font-poppins font-extrabold text-5xl md:text-6xl tracking-wider mt-2 brand-text">GRAMIN TECH</h1>
+                    </div>
+                </header>
+
+                <!-- Banner Design -->
+                <div class="banner rounded-xl shadow-2xl p-6 md:p-10 flex flex-col text-white overflow-hidden mb-8 w-full">
+                    
+                    <div class="text-center mb-6">
+                        <p class="font-semibold text-lg md:text-2xl text-cyan-300 mt-2">আপনার বিশ্বস্ত ডিজিটাল পরিষেবা কেন্দ্র</p>
+                        <p class="text-sm text-cyan-200">বিস্তারিত জানতে যেকোনো সেবায় ক্লিক করুন।</p>
+                    </div>
+
+                    <!-- Main Content: Services (Clickable Links) -->
+                    <main class="flex-grow grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-x-8 mb-6">
+                        <div class="space-y-3">${column1}</div>
+                        <div class="space-y-3">${column2}</div>
+                    </main>
+                    
+                </div>
+
+                <!-- Contact Card -->
+                <div class="contact-card p-6 rounded-xl shadow-xl text-gray-800 mb-8 w-full bg-white border-2 border-indigo-400">
+                    <h3 class="text-xl md:text-2xl font-bold text-indigo-700 mb-4 border-b-2 border-indigo-200 pb-2">যোগাযোগের ঠিকানা ও মাধ্যম</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                        
+                        <!-- Address Block -->
+                        <div class="md:col-span-2 space-y-1">
+                            <p class="font-semibold text-lg text-gray-700">ঠিকানা:</p>
+                            <p class="font-medium text-gray-600">গ্রাম - বালিপাড়া, পোস্ট - দিয়াড় ফতেপুর, থানা - লালগোলা</p>
+                            <p class="font-medium text-gray-600">জেলা - মুর্শিদাবাদ, পিন - 742135</p>
+                        </div>
+
+                        <!-- Contact/WhatsApp Block -->
+                        <div class="flex flex-col items-center md:items-start space-y-3">
+                            <!-- Mobile Number -->
+                            <div class="bg-indigo-100 text-indigo-800 px-4 py-2 rounded-lg shadow-inner">
+                                <p class="font-bold text-xl md:text-2xl leading-none">মোবাইল: 9333617735</p>
+                            </div>
+                            <!-- WhatsApp Link Button -->
+                            <a href="https://wa.me/${whatsappNumber}" target="_blank" 
+                               class="flex items-center bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                                <!-- Simple Chat SVG Icon -->
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 mr-2">
+                                    <path d="M12.001 2c-5.521 0-10 4.478-10 10s4.479 10 10 10c1.77 0 3.42-.464 4.87-1.272l3.41 1.018-1.04-3.32c.81-1.46 1.28-3.15 1.28-4.94 0-5.522-4.479-10-10-10zm4.8 13.9l-.3-.2c-1.2-.6-2.5-.9-3.9-.9-1.4 0-2.8.3-3.9.9l-.3.2c-.3.2-.5.1-.7-.2l-.6-1.5c-.1-.3-.1-.6 0-.8l.2-.3c1.2-1 2.8-1.5 4.4-1.5 1.6 0 3.1.5 4.4 1.5l.2.3c.1.2.1.5 0 .8l-.6 1.5c-.1.3-.3.4-.6.2z"/>
+                                </svg>
+                                <span class="leading-none font-poppins text-lg">WhatsApp-এ বার্তা দিন</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Gemini API Powered Service Assistant -->
+                <div class="gemini-assistant p-6 rounded-xl shadow-lg w-full bg-blue-50 border border-blue-200">
+                    <h2 class="text-2xl md:text-3xl font-bold text-blue-800 mb-4 font-poppins flex items-center">
+                        ✨ সার্ভিস আইডিয়া সহকারী
+                    </h2>
+                    <p class="text-gray-700 mb-4">
+                        আপনার ডিজাইন, ডকুমেন্ট বা অনলাইন ফর্ম সংক্রান্ত কাজের জন্য একটি ধারণা লিখুন, জেমিনি এআই আপনাকে সৃজনশীল আইডিয়া ও পরামর্শ দেবে।
+                    </p>
+                    
+                    <div class="flex flex-col md:flex-row gap-4 mb-4">
+                        <input type="text" id="userInput" placeholder="উদাহরণ: নতুন কোচিং সেন্টারের ওয়েবসাইটের জন্য কী কী বিভাগ রাখা উচিত?"
+                               class="flex-grow p-3 border border-blue-400 rounded-lg focus:ring-blue-600 focus:border-blue-600 text-gray-800 shadow-sm">
+                        <button id="generateButton" 
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-200 flex items-center justify-center disabled:opacity-50 transform hover:scale-[1.01]">
+                            আইডিয়া তৈরি করুন
+                        </button>
+                    </div>
+                    
+                    <div id="loadingIndicator" class="hidden flex items-center justify-center text-blue-600 space-x-2 p-4">
+                        <div class="loading-ring"></div>
+                        <span>আইডিয়া তৈরি হচ্ছে...</span>
+                    </div>
+
+                    <div id="outputContainer" class="mt-6 p-4 bg-white rounded-lg shadow-inner min-h-[100px] border border-gray-300">
+                        <p id="outputContent" class="text-gray-800 whitespace-pre-wrap">ফলাফল এখানে দেখাবে।</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Generates the HTML for the Service Detail "New Page"
+        function generateServiceDetailHTML(serviceId) {
+            const detail = serviceData[serviceId] || { title: "ত্রুটি", content: "এই পরিষেবার তথ্য পাওয়া যায়নি।" };
+            const whatsappMessage = `আমি আপনার ${detail.title.split(':')[0].replace('✦', '').trim()} পরিষেবা সম্পর্কে বিস্তারিত জানতে চাই।`;
+            const encodedMessage = encodeURIComponent(whatsappMessage);
+
+            // Find the color based on serviceId index for visual consistency
+            const index = servicesList.findIndex(s => s.id === serviceId);
+            const colorIndex = index >= 0 ? index % serviceColors.length : 0;
+            const detailColor = serviceColors[colorIndex].base.match(/border-([a-z]+)-(\d+)/)[0].replace('border', 'text').replace('400', '700'); 
+            const lightBg = detailColor.replace('text', 'bg').replace('700', '50');
+            const mediumBorder = detailColor.replace('text', 'border').replace('700', '300');
+
+
+            return `
+                <div class="rounded-xl shadow-2xl p-6 md:p-10 text-gray-800 w-full bg-white">
+                    <!-- Back Button -->
+                    <a href="#" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold mb-6 transition duration-200 transform hover:translate-x-[-2px]">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                        </svg>
+                        মূল পাতায় ফিরে যান
+                    </a>
+
+                    <!-- Title -->
+                    <h1 class="text-3xl md:text-4xl font-extrabold ${detailColor} mb-6 border-b-4 ${mediumBorder} pb-2">${detail.title}</h1>
+                    
+                    <!-- Content -->
+                    <div class="${lightBg} p-6 rounded-lg shadow-md mb-8">
+                        <h2 class="text-xl md:text-2xl font-bold ${detailColor} mb-4">আমাদের কাজের প্রক্রিয়া:</h2>
+                        <p class="text-gray-700 leading-relaxed text-lg">${detail.content}</p>
+                    </div>
+                    
+                    <!-- WhatsApp Contact CTA -->
+                    <div class="flex flex-col sm:flex-row items-center justify-between mt-8 p-6 bg-green-50 rounded-xl border border-green-300 shadow-xl">
+                         <p class="text-lg text-green-800 font-bold mb-4 sm:mb-0">এই পরিষেবাটি নিতে বা বিস্তারিত আলোচনার জন্য সরাসরি যোগাযোগ করুন:</p>
+                         <a id="detailWhatsappLink" href="https://wa.me/${whatsappNumber}?text=${encodedMessage}" target="_blank" 
+                            class="flex items-center bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 mr-2">
+                                 <path d="M12.001 2c-5.521 0-10 4.478-10 10s4.479 10 10 10c1.77 0 3.42-.464 4.87-1.272l3.41 1.018-1.04-3.32c.81-1.46 1.28-3.15 1.28-4.94 0-5.522-4.479-10-10-10zm4.8 13.9l-.3-.2c-1.2-.6-2.5-.9-3.9-.9-1.4 0-2.8.3-3.9.9l-.3.2c-.3.2-.5.1-.7-.2l-.6-1.5c-.1-.3-.1-.6 0-.8l.2-.3c1.2-1 2.8-1.5 4.4-1.5 1.6 0 3.1.5 4.4 1.5l.2.3c.1.2.1.5 0 .8l-.6 1.5c-.1.3-.3.4-.6.2z"/>
+                             </svg>
+                             <span class="leading-none font-poppins text-lg">হোয়াটসঅ্যাপে চ্যাট করুন</span>
+                         </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- Core App Logic & Event Handling (Unchanged) ---
+
+        function attachEventListeners() {
+            const generateButton = document.getElementById('generateButton');
+            if (generateButton) {
+                generateButton.removeEventListener('click', handleGeminiGeneration);
+                generateButton.addEventListener('click', handleGeminiGeneration);
+            }
+        }
+
+        async function handleGeminiGeneration() {
+            const userInput = document.getElementById('userInput').value.trim();
+            const outputContent = document.getElementById('outputContent');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const generateButton = document.getElementById('generateButton');
+
+            if (userInput === "") {
+                outputContent.textContent = "অনুগ্রহ করে আপনার পরিষেবা সংক্রান্ত একটি ধারণা লিখুন।";
+                return;
+            }
+
+            generateButton.disabled = true;
+            loadingIndicator.classList.remove('hidden');
+            outputContent.textContent = "";
+
+            try {
+                const systemPrompt = "তুমি একজন সৃজনশীল এবং প্রযুক্তি-সচেতন কনটেন্ট স্ট্র্যাটেজিস্ট। ব্যবহারকারীর অনুরোধের উপর ভিত্তি করে, তাদের ওয়েব ডিজাইন বা ডকুমেন্ট তৈরির প্রয়োজনে সহায়ক, ব্যবহারিক এবং সৃজনশীল ধারণা দাও। উত্তরটি বাংলায় দাও এবং পয়েন্ট আকারে বিন্যস্ত করো।";
+                const userQuery = `ব্যবহারকারী এই পরিষেবা কেন্দ্রে একটি অনুরোধ করেছেন: "${userInput}"। আমার কাজ হল এর জন্য কিছু সৃজনশীল ও কার্যকরী আইডিয়া তৈরি করা।`;
+
+                const payload = {
+                    contents: [{ parts: [{ text: userQuery }] }],
+                    tools: [{ "google_search": {} }],
+                    systemInstruction: {
+                        parts: [{ text: systemPrompt }]
+                    },
+                };
+
+                const response = await fetchWithRetry(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (generatedText) {
+                    outputContent.textContent = generatedText;
+                } else {
+                    outputContent.textContent = "দুঃখিত, আইডিয়া তৈরি করা সম্ভব হয়নি। আবার চেষ্টা করুন।";
+                }
+
+            } catch (error) {
+                console.error("Gemini API Error:", error);
+                outputContent.textContent = "নেটওয়ার্ক বা API-এর সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন।";
+            } finally {
+                generateButton.disabled = false;
+                loadingIndicator.classList.add('hidden');
+            }
+        }
+
+        async function fetchWithRetry(url, options, maxRetries = 5, delay = 1000) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok && response.status === 429 && i < maxRetries - 1) {
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        delay *= 2;
+                        continue;
+                    }
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response;
+                } catch (error) {
+                    if (i === maxRetries - 1) throw error;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2;
+                }
+            }
+        }
+
+        function renderApp() {
+            const appContainer = document.getElementById('app-container');
+            const hash = window.location.hash.substring(1); 
+
+            if (hash.startsWith('details-')) {
+                const serviceId = hash.replace('details-', '');
+                appContainer.innerHTML = generateServiceDetailHTML(serviceId);
+                window.scrollTo(0, 0); 
+            } else {
+                appContainer.innerHTML = generateMainBannerHTML();
+            }
+            
+            attachEventListeners();
+        }
+        
+        window.addEventListener('popstate', renderApp);
+        
+        window.onload = renderApp;
+    </script>
+</body>
+</html>
